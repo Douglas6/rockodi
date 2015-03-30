@@ -1,17 +1,17 @@
 {
     "appKeys": {
-        "MSG_KEY_ARTIST": 102,
-        "MSG_KEY_BUTTON_CODE": 0,
-        "MSG_KEY_BUTTON_DATA": 1,
-        "MSG_KEY_MUTED": 104,
-        "MSG_KEY_PLAY_STATE": 103,
-        "MSG_KEY_TITLE": 101,
+        "MSG_KEY_CMD": 0,
+        "MSG_KEY_CMD_DATA": 1,
         "MSG_KEY_VOLUME": 100
+        "MSG_KEY_TITLE": 101,
+        "MSG_KEY_ARTIST": 102,
+        "MSG_KEY_PLAY_STATE": 103,
+        "MSG_KEY_MUTED": 104,
     },
     "capabilities": [
-        ""
+        "configurable"
     ],
-    "companyName": "douglasotwell@gmail.com",
+    "companyName": "Douglas Otwell",
     "longName": "Rockodi",
     "projectType": "native",
     "resources": {
