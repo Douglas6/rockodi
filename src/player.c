@@ -79,23 +79,19 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
   while(t != NULL) {
     switch(t->key) {
       case MSG_KEY_TITLE: 
-        DEBUG("Adjusting title: %s", t->value->cstring);
         strncpy(s_title, t->value->cstring, sizeof(s_title));
         text_layer_set_text(s_txt_title, s_title);
         break;
       case MSG_KEY_ARTIST: 
-        DEBUG("Adjusting artist: %s", t->value->cstring);
         strncpy(s_artist, t->value->cstring, sizeof(s_artist));
         text_layer_set_text(s_txt_artist, s_artist);
         break;
       case MSG_KEY_VOLUME: 
-        DEBUG("Adjusting volume: %d", (int) t->value->int32);
         layer_data = (uint32_t *)layer_get_data(s_lyr_volume);
     	  *layer_data = t->value->int32;
         layer_mark_dirty(s_lyr_volume);
         break;
       case MSG_KEY_PLAY_STATE: 
-        DEBUG("Adjusting play state: %d", (int) t->value->int32);
         if (t->value->int32 > 0) {
           action_bar_layer_set_icon(s_action_bar, BUTTON_ID_SELECT, s_icon_pause);
         } else {

@@ -70,11 +70,19 @@ static int16_t menu_get_header_height_cb(MenuLayer *menu_layer, uint16_t section
   return 0;
 }
 
+static int16_t menu_get_separator_height_cb(MenuLayer *menu_layer, MenuIndex *cell_index, void *data) {
+  return 0;
+}
+
 static void menu_draw_row_cb(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {
-//  graphics_context_set_fill_color(ctx, GColorBlack);
   BasicMenuModel *model = (BasicMenuModel*) data;
   GRect bounds = layer_get_frame(cell_layer);
   GBitmap *icon = model->items[cell_index->row]->icon;
+  
+  graphics_context_set_fill_color(ctx, GColorWhite);
+  graphics_fill_rect(ctx, GRect(0, 0, bounds.size.w, bounds.size.h), 12, GCornersAll);
+  graphics_context_set_fill_color(ctx, GColorBlack);
+  graphics_fill_rect(ctx, GRect(1, 1, bounds.size.w - 2, bounds.size.h - 2), 12, GCornersAll);
 
   int offset = 4;
   if (icon != NULL) {
@@ -100,6 +108,7 @@ BasicMenuLayer* basic_menu_layer_create(GRect rect, BasicMenuModel* model) {
     .draw_header = menu_draw_header_cb,
     .draw_row = menu_draw_row_cb,
     .select_click = menu_select_cb,
+    .get_separator_height = menu_get_separator_height_cb,
   });
 
   return layer;

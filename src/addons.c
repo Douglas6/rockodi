@@ -61,7 +61,6 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     t = dict_read_next(iterator);
   }
   int items_size = dict_write_end(&items_iter);
-  DEBUG("Size of the written buffer is %d bytes.", items_size);
   load_menu();
 }
 

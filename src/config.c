@@ -18,22 +18,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
-#pragma once
-#define MSG_KEY_CMD 0
-#define MSG_KEY_CMD_DATA 1
-#define MSG_KEY_VOLUME 100
-#define MSG_KEY_TITLE 101
-#define MSG_KEY_ARTIST 102
-#define MSG_KEY_PLAY_STATE 103
-  
-// convenient macros courtesy of Matthew Tole: github.com/smallstoneapps/pebble-assist
-#define DEBUG(...) app_log(APP_LOG_LEVEL_DEBUG, __FILE__, __LINE__, __VA_ARGS__)
-#define INFO(...) app_log(APP_LOG_LEVEL_INFO, __FILE__, __LINE__, __VA_ARGS__)
-#define WARN(...) app_log(APP_LOG_LEVEL_WARNING, __FILE__, __LINE__, __VA_ARGS__)
-#define ERROR(...) app_log(APP_LOG_LEVEL_ERROR, __FILE__, __LINE__, __VA_ARGS__)
+#include <pebble.h>
+#include "config.h"
+#include "common.h"
 
-void outbox_send(char* button_code);
-void outbox_send_with_data(char* send_code, char* send_data);
-char* translate_app_message_result(AppMessageResult app_message_error);
-char* split_id_name_pair(char *pair);
-void strip_ext(char *str);
+static Window *s_window;
+
+static void initialize_ui(void) {
+  s_window = window_create();
+  window_set_fullscreen(s_window, false);
+  window_set_background_color(s_window, GColorBlack);
+  Layer *window_layer = window_get_root_layer(s_window);
+  GRect bounds = layer_get_frame(window_layer);
+
+}
+
+static void destroy_ui() {
+  window_destroy(s_window);
+}
+
+static void handle_window_unload(Window* window) {
+  destroy_ui();
+}
+
+void show_config(void) {
+  initialize_ui();
+  window_set_window_handlers(s_window, (WindowHandlers) {
+    .unload = handle_window_unload,
+  });
+  window_stack_push(s_window, true);
+}
+
+void hide_config(void) {
+  window_stack_remove(s_window, true);
+}

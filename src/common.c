@@ -26,7 +26,7 @@ void outbox_send(char* send_cmd){
 	DictionaryIterator *iter;
  	app_message_outbox_begin(&iter);
 
-  Tuplet value = TupletCString(MSG_KEY_BUTTON_CODE, send_cmd);
+  Tuplet value = TupletCString(MSG_KEY_CMD, send_cmd);
 	dict_write_tuplet(iter, &value);
 
   dict_write_end(iter);
@@ -37,9 +37,9 @@ void outbox_send_with_data(char* send_cmd, char* send_data){
 	DictionaryIterator *iter;
  	app_message_outbox_begin(&iter);
   
-	Tuplet code = TupletCString(MSG_KEY_BUTTON_CODE, send_cmd);
+	Tuplet code = TupletCString(MSG_KEY_CMD, send_cmd);
 	dict_write_tuplet(iter, &code);
-  Tuplet data = TupletCString(MSG_KEY_BUTTON_DATA, send_data);
+  Tuplet data = TupletCString(MSG_KEY_CMD_DATA, send_data);
 	dict_write_tuplet(iter, &data);
   
 	dict_write_end(iter);

@@ -23,10 +23,16 @@
 //
 var MessageQueue=function(){var RETRY_MAX=5;var queue=[];var sending=false;var timer=null;return{reset:reset,sendAppMessage:sendAppMessage,size:size};function reset(){queue=[];sending=false}function sendAppMessage(message,ack,nack){if(!isValidMessage(message)){return false}queue.push({message:message,ack:ack||null,nack:nack||null,attempts:0});setTimeout(function(){sendNextMessage()},1);return true}function size(){return queue.length}function isValidMessage(message){if(message!==Object(message)){return false}var keys=Object.keys(message);if(!keys.length){return false}for(var k=0;k<keys.length;k+=1){var validKey=/^[0-9a-zA-Z-_]*$/.test(keys[k]);if(!validKey){return false}var value=message[keys[k]];if(!validValue(value)){return false}}return true;function validValue(value){switch(typeof value){case"string":return true;case"number":return true;case"object":if(toString.call(value)=="[object Array]"){return true}}return false}}function sendNextMessage(){if(sending){return}var message=queue.shift();if(!message){return}message.attempts+=1;sending=true;Pebble.sendAppMessage(message.message,ack,nack);timer=setTimeout(function(){timeout()},1e3);function ack(){clearTimeout(timer);setTimeout(function(){sending=false;sendNextMessage()},200);if(message.ack){message.ack.apply(null,arguments)}}function nack(){clearTimeout(timer);if(message.attempts<RETRY_MAX){queue.unshift(message);setTimeout(function(){sending=false;sendNextMessage()},200*message.attempts)}else{if(message.nack){message.nack.apply(null,arguments)}}}function timeout(){setTimeout(function(){sending=false;sendNextMessage()},1e3);if(message.ack){message.ack.apply(null,arguments)}}}}();
 // global variables
-var ISDEBUG = true;
-var g_server_url = "http://192.168.1.76";
-var g_user;
-var g_password;
+
+var storage_keys = {
+  "IP_ADDRESS": 0,
+  "USERNAME": 1,
+  "PASSWORD": 2
+}
+var ISDEBUG = false;
+var g_ip_address = "";
+var g_username = "";
+var g_password = "";
 var g_player_id;
 var g_player_type;
 var g_volume;
@@ -41,30 +47,42 @@ var JsonRpcRequest = function (method, params) {
 };
 
 function sendJsonRequest(requests, callback) {
+  var username = null;
+  var password = null;
   var response = null;
   
 	var req = new XMLHttpRequest();
-	req.onload = function(e) {
-		if (req.readyState == 4 && req.status == 200) {
-      if (ISDEBUG) console.log("Response text: "+req.responseText);
-			response = JSON.parse(req.responseText);
-      if (response.result == null) {
-        handleJsonRpcError(response);
+	req.onreadystatechange = function(e) {
+		if (req.readyState == 4) {
+  		if (req.status == 200) {
+        if (ISDEBUG) console.log("Response text: "+req.responseText);
+	  		response = JSON.parse(req.responseText);
+        if (response.result == null) {
+          handleJsonRpcError(response);
+        } else {
+          if (callback != null) {
+            callback(response.result);
+          }
+        }
       } else {
-        if (callback != null) {
-          callback(response.result);
+        if (req.status !== 0) {
+          console.log("Error connecting ["+req.status+"]: "+req.statusText);
+          Pebble.showSimpleNotificationOnPebble("Could not connect ["+req.status+"]", "Please check your Rockodi settings in the Pebble app.");
         }
       }
     }
 	};
-	req.onerror = function(e) {
-		console.log("Error connecting to Kodi");
-	};
-  var url_string = g_server_url+"/jsonrpc?request=";
-  req.open('GET', url_string+encodeURI(JSON.stringify(requests)), true);
-	req.timeout = 2000;
+  if (g_username !== "") {
+    username = g_username;
+    if (g_password !== "") {
+      password = g_password;
+    }
+  }
+  var url_string = "http://"+g_ip_address+"/jsonrpc?request=";
+  req.open('GET', url_string+encodeURI(JSON.stringify(requests)), true, username, password);
+	req.timeout = 4000;
 	req.send(null);
-  if (ISDEBUG) console.log("Sent request: "+url_string);
+  if (ISDEBUG) console.log("Sent request: "+url_string+encodeURI(JSON.stringify(requests)));
 }
 
 function handleJsonRpcError(response) {
@@ -123,7 +141,6 @@ function getItemCb(result) {
   } else {
     artist = (result.item.artist.length < 1) ? "" : result.item.artist[0];
   }
-  console.log("Artist:"+artist);
   MessageQueue.sendAppMessage({"MSG_KEY_TITLE":title,"MSG_KEY_ARTIST":artist});
 }
 function playPause() {
@@ -226,7 +243,7 @@ function getMusicPlaylistsCb(result) {
   MessageQueue.sendAppMessage(dict);
 }
 function playMusicPlaylist(payload) {
-  var filename = payload.MSG_KEY_BUTTON_DATA;
+  var filename = payload.MSG_KEY_CMD_DATA;
   var requests = [];
   requests.push(new JsonRpcRequest("PlayList.Clear", {"playlistid": 0}));
   requests.push(new JsonRpcRequest("PlayList.Add", {"playlistid":0, "item":{"directory":filename,"recursive":true}}));
@@ -249,7 +266,7 @@ function getAddonsCb(result) {
   MessageQueue.sendAppMessage(dict);
 }
 function executeAddon(payload) {
-  var addonid = payload.MSG_KEY_BUTTON_DATA;
+  var addonid = payload.MSG_KEY_CMD_DATA;
   sendJsonRequest(new JsonRpcRequest("Addons.ExecuteAddon", {"addonid": addonid}));
 }
 // Power methods
@@ -269,11 +286,31 @@ function systemSuspend() {
 Pebble.addEventListener('ready',
   function(e) {
     console.log('Rockodi copyright (c) 2015, Douglas Otwell');
+    g_ip_address = localStorage.getItem(storage_keys.IP_ADDRESS);
+    g_username = localStorage.getItem(storage_keys.USERNAME);
+    g_password = localStorage.getItem(storage_keys.PASSWORD);
+  }
+);
+Pebble.addEventListener('showConfiguration', function(e) {
+  var query_string = encodeURI("?ip_address="+g_ip_address+"&username="+g_username+"&password="+g_password);
+  Pebble.openURL('http://www.dkographicdetails.com/rockodi/config/config-page.html'+query_string);
+});
+Pebble.addEventListener('webviewclosed',
+  function(e) {
+    var configuration = JSON.parse(decodeURIComponent(e.response));
+    if (typeof configuration.ip_address !== "undefined") {
+      localStorage.setItem(storage_keys.IP_ADDRESS, configuration.ip_address);
+      localStorage.setItem(storage_keys.USERNAME, configuration.username);
+      localStorage.setItem(storage_keys.PASSWORD, configuration.password);
+      g_ip_address = localStorage.getItem(storage_keys.IP_ADDRESS);
+      g_username = localStorage.getItem(storage_keys.USERNAME);
+      g_password = localStorage.getItem(storage_keys.PASSWORD);
+    }
   }
 );
 Pebble.addEventListener("appmessage",
   function(e) {
-    var cmd = e.payload.MSG_KEY_BUTTON_CODE;
+    var cmd = e.payload.MSG_KEY_CMD;
     switch(cmd) {
       // Player messages
       case "GET_STATUS": getStatus(); break;

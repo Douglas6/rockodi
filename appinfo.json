@@ -1,12 +1,12 @@
 {
     "appKeys": {
+        "MSG_KEY_ARTIST": 102,
         "MSG_KEY_CMD": 0,
         "MSG_KEY_CMD_DATA": 1,
-        "MSG_KEY_VOLUME": 100,
-        "MSG_KEY_TITLE": 101,
-        "MSG_KEY_ARTIST": 102,
+        "MSG_KEY_MUTED": 104,
         "MSG_KEY_PLAY_STATE": 103,
-        "MSG_KEY_MUTED": 104
+        "MSG_KEY_TITLE": 101,
+        "MSG_KEY_VOLUME": 100
     },
     "capabilities": [
         "configurable"
@@ -17,118 +17,13 @@
     "resources": {
         "media": [
             {
-                "file": "images/pics.png",
-                "name": "ICON_PICS",
+                "file": "images/ff.png",
+                "name": "ICON_FF",
                 "type": "png"
             },
             {
-                "file": "images/info.png",
-                "name": "ICON_INFO",
-                "type": "png"
-            },
-            {
-                "file": "images/weather.png",
-                "name": "ICON_WEATHER",
-                "type": "png"
-            },
-            {
-                "file": "images/video.png",
-                "name": "ICON_VIDEO",
-                "type": "png"
-            },
-            {
-                "file": "images/home.png",
-                "name": "ICON_HOME",
-                "type": "png"
-            },
-            {
-                "file": "images/full.png",
-                "name": "ICON_FULL",
-                "type": "png"
-            },
-            {
-                "file": "images/goto.png",
-                "name": "ICON_GOTO",
-                "type": "png"
-            },
-            {
-                "file": "images/list.png",
-                "name": "ICON_LIST",
-                "type": "png"
-            },
-            {
-                "file": "images/button.png",
-                "name": "ICON_BUTTON",
-                "type": "png"
-            },
-            {
-                "file": "images/vol_up.png",
-                "name": "ICON_VOL_UP",
-                "type": "png"
-            },
-            {
-                "file": "images/vol_dn.png",
-                "name": "ICON_VOL_DN",
-                "type": "png"
-            },
-            {
-                "file": "images/power.png",
-                "name": "ICON_POWER",
-                "type": "png"
-            },
-            {
-                "file": "images/player.png",
-                "name": "ICON_PLAYER",
-                "type": "png"
-            },
-            {
-                "file": "images/remote.png",
-                "name": "ICON_REMOTE",
-                "type": "png"
-            },
-            {
-                "file": "images/addons.png",
-                "name": "ICON_ADDONS",
-                "type": "png"
-            },
-            {
-                "file": "images/speaker.png",
-                "name": "ICON_SPEAKER",
-                "type": "png"
-            },
-            {
-                "file": "images/pause.png",
-                "name": "ICON_PAUSE",
-                "type": "png"
-            },
-            {
-                "file": "images/cursor_up.png",
-                "name": "ICON_CURSOR_UP",
-                "type": "png"
-            },
-            {
-                "file": "images/cursor_down.png",
-                "name": "ICON_CURSOR_DOWN",
-                "type": "png"
-            },
-            {
-                "file": "images/check.png",
-                "name": "ICON_CHECK",
-                "type": "png"
-            },
-            {
-                "file": "images/up.png",
-                "name": "ICON_UP",
-                "type": "png"
-            },
-            {
-                "file": "images/down.png",
-                "name": "ICON_DOWN",
-                "type": "png"
-            },
-            {
-                "file": "images/play.png",
-                "name": "ICON_PLAY",
+                "file": "images/rev.png",
+                "name": "ICON_REV",
                 "type": "png"
             },
             {
@@ -138,13 +33,118 @@
                 "type": "png"
             },
             {
-                "file": "images/rev.png",
-                "name": "ICON_REV",
+                "file": "images/play.png",
+                "name": "ICON_PLAY",
                 "type": "png"
             },
             {
-                "file": "images/ff.png",
-                "name": "ICON_FF",
+                "file": "images/down.png",
+                "name": "ICON_DOWN",
+                "type": "png"
+            },
+            {
+                "file": "images/up.png",
+                "name": "ICON_UP",
+                "type": "png"
+            },
+            {
+                "file": "images/check.png",
+                "name": "ICON_CHECK",
+                "type": "png"
+            },
+            {
+                "file": "images/cursor_down.png",
+                "name": "ICON_CURSOR_DOWN",
+                "type": "png"
+            },
+            {
+                "file": "images/cursor_up.png",
+                "name": "ICON_CURSOR_UP",
+                "type": "png"
+            },
+            {
+                "file": "images/pause.png",
+                "name": "ICON_PAUSE",
+                "type": "png"
+            },
+            {
+                "file": "images/speaker.png",
+                "name": "ICON_SPEAKER",
+                "type": "png"
+            },
+            {
+                "file": "images/addons.png",
+                "name": "ICON_ADDONS",
+                "type": "png"
+            },
+            {
+                "file": "images/remote.png",
+                "name": "ICON_REMOTE",
+                "type": "png"
+            },
+            {
+                "file": "images/player.png",
+                "name": "ICON_PLAYER",
+                "type": "png"
+            },
+            {
+                "file": "images/power.png",
+                "name": "ICON_POWER",
+                "type": "png"
+            },
+            {
+                "file": "images/vol_dn.png",
+                "name": "ICON_VOL_DN",
+                "type": "png"
+            },
+            {
+                "file": "images/vol_up.png",
+                "name": "ICON_VOL_UP",
+                "type": "png"
+            },
+            {
+                "file": "images/button.png",
+                "name": "ICON_BUTTON",
+                "type": "png"
+            },
+            {
+                "file": "images/list.png",
+                "name": "ICON_LIST",
+                "type": "png"
+            },
+            {
+                "file": "images/goto.png",
+                "name": "ICON_GOTO",
+                "type": "png"
+            },
+            {
+                "file": "images/full.png",
+                "name": "ICON_FULL",
+                "type": "png"
+            },
+            {
+                "file": "images/home.png",
+                "name": "ICON_HOME",
+                "type": "png"
+            },
+            {
+                "file": "images/video.png",
+                "name": "ICON_VIDEO",
+                "type": "png"
+            },
+            {
+                "file": "images/weather.png",
+                "name": "ICON_WEATHER",
+                "type": "png"
+            },
+            {
+                "file": "images/info.png",
+                "name": "ICON_INFO",
+                "type": "png"
+            },
+            {
+                "file": "images/pics.png",
+                "name": "ICON_PICS",
                 "type": "png"
             }
         ]
