@@ -114,7 +114,9 @@ static void player_tap_cb(AccelAxisType axis, int32_t direction) {
 
 static void initialize_ui() {
   s_window = window_create();
+#ifdef PBL_SDK_2
   window_set_fullscreen(s_window, false);
+#endif
   window_set_background_color(s_window, GColorBlack);
   Layer *window_layer = window_get_root_layer(s_window);
   GRect bounds = layer_get_frame(window_layer);
