@@ -48,7 +48,9 @@ static void click_provider(void *context)
 
 static void initialize_ui() {
   s_window = buttons_window_create();
+#ifdef PBL_SDK_2
   window_set_fullscreen(s_window, false);
+#endif
   Layer *window_layer = window_get_root_layer(s_window);
 
   s_icon_cursor_up = gbitmap_create_with_resource(RESOURCE_ID_ICON_CURSOR_UP);

@@ -149,12 +149,16 @@
             }
         ]
     },
-    "sdkVersion": "2",
+    "sdkVersion": "3",
     "shortName": "Rockodi",
     "uuid": "77495959-66fe-4db1-ab4b-368369babb00",
     "versionCode": 1,
     "versionLabel": "0.1",
     "watchapp": {
         "watchface": false
-    }
+    },
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ]
 }
